@@ -11,13 +11,14 @@
 </head>
 <body>
     <header class="text-center"><h1>To-do App</h1></header>
-    <main class="text-center">
-        <form action="#">
-            <input id="txt" type="text">
-            <button id="btn-add" type="button">ADD</button>
+    <main class="p-2 justify-content-right">
+        <form class="d-felx gap-1" action="javascript:void(0)">
+            <input id="txt" type="text" placeholder="Ex: Design UI">
+            <button class="btn btn-primary" id="btn-add">ADD</button>
         </form>
+        <ul class="list-unstyled p-2" id="task-container"></ul>
         <ul id="task-container">
-            <li>
+            <li class="">
                 <input type="checkbox" name="" id="chk-task-1">
                 <label for="chk-task-1">Task 1</label>
                 <i class="delete bi bi-trash3-fill"></i>
