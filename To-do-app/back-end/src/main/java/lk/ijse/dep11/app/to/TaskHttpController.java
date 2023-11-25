@@ -15,12 +15,12 @@ public class TaskHttpController {
         System.out.println("get all task");
     }
 
-    @PatchMapping("{id}")
+    @PatchMapping("/{id}")
     public void editTask(){
         System.out.println("edit a task");
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public void deleteTask(){
         System.out.println("delete a task");
     }
