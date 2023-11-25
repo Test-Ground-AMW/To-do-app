@@ -12,22 +12,22 @@ import java.util.Map;
 @RequestMapping("/tasks")
 public class TaskHttpController {
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
-    public TaskTO createTask(@RequestBody String description){
+    @PostMapping(produces = "application/json", consumes = "application/json")
+    public TaskTO createTask(@RequestBody TaskTO task){
         System.out.println("create task");
-        return new TaskTO(1,"Created",true);
+        return null;
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping
+    @GetMapping(produces = "application/json")
     public List<TaskTO> getTask(){
         System.out.println("get all task");
         return new ArrayList<>();
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PatchMapping("/{id}")
-    public void editTask(@PathVariable String id, @RequestBody Map<String,String> params){
+    @PatchMapping(value = "/{id}", consumes = "application/json")
+    public void editTask(@PathVariable String id, @RequestBody TaskTO task){
         System.out.println("edit a task");
     }
 
