@@ -1,4 +1,4 @@
-package lk.ijse.dep11.app;
+package lk.ijse.dep11.todo;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 

@@ -1,4 +1,4 @@
-package lk.ijse.dep11.app;
+package lk.ijse.dep11.todo;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

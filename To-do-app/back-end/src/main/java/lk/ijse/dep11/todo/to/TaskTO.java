@@ -1,4 +1,4 @@
-package lk.ijse.dep11.app.to;
+package lk.ijse.dep11.todo.to;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
