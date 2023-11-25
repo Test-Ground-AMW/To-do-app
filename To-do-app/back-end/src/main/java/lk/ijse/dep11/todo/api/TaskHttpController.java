@@ -6,6 +6,7 @@ import lk.ijse.dep11.todo.to.TaskTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,11 @@ public class TaskHttpController {
         config.setDriverClassName("com.mysql.cj.jdbc.Driver");
         config.addDataSourceProperty("maximumPoolSize",10);
         pool = new HikariDataSource(config);
+    }
+
+    @PreDestroy
+    public void destroy(){
+        pool.close();
     }
 
     @ResponseStatus(HttpStatus.CREATED)
