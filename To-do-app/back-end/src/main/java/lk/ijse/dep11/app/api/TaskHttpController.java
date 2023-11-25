@@ -1,4 +1,4 @@
-package lk.ijse.dep11.app.to;
+package lk.ijse.dep11.app.api;
 
 import org.springframework.web.bind.annotation.*;
 
