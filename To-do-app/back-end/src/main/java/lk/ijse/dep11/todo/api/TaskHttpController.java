@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lk.ijse.dep11.todo.to.TaskTO;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PreDestroy;
@@ -33,7 +34,7 @@ public class TaskHttpController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(produces = "application/json", consumes = "application/json")
-    public TaskTO createTask(@RequestBody TaskTO task){
+    public TaskTO createTask(@RequestBody @Validated(TaskTO.create.class) TaskTO task){
         System.out.println("create task");
         return null;
     }
@@ -47,7 +48,7 @@ public class TaskHttpController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping(value = "/{id}", consumes = "application/json")
-    public void editTask(@PathVariable String id, @RequestBody TaskTO task){
+    public void editTask(@PathVariable String id, @RequestBody @Validated(TaskTO.update.class) TaskTO task){
         System.out.println("edit a task");
     }
 
