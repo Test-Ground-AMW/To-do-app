@@ -6,6 +6,7 @@ import lk.ijse.dep11.todo.to.TaskTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PreDestroy;
 import java.sql.*;
@@ -55,14 +56,34 @@ public class TaskHttpController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(produces = "application/json")
     public List<TaskTO> getTask(){
-        System.out.println("get all task");
+        try(Connection connection = pool.getConnection()) {
+            Statement stm = connection.createStatement();
+            ResultSet rst = stm.executeQuery("SELECT * FROM task");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return new ArrayList<>();
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping(value = "/{id}", consumes = "application/json")
-    public void editTask(@PathVariable String id, @RequestBody @Validated(TaskTO.update.class) TaskTO task){
-        System.out.println("edit a task");
+    public void editTask(@PathVariable int id,
+                         @RequestBody @Validated(TaskTO.update.class) TaskTO task){
+        try(Connection connection = pool.getConnection()) {
+            // Business validation
+            PreparedStatement stmExist = connection.prepareStatement("SELECT * FROM task WHERE id = ?");
+            stmExist.setInt(1,id);
+            if (!stmExist.executeQuery().next()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The task not found");
+            }
+            PreparedStatement stm = connection.prepareStatement("UPDATE task SET description = ?, status = ? WHERE id = ?");
+            stm.setString(1,task.getDescription());
+            stm.setBoolean(2, task.getStatus());
+            stm.setInt(3,id);
+            stm.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
