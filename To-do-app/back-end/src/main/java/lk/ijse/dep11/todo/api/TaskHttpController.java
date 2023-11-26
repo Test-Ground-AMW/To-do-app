@@ -59,10 +59,19 @@ public class TaskHttpController {
         try(Connection connection = pool.getConnection()) {
             Statement stm = connection.createStatement();
             ResultSet rst = stm.executeQuery("SELECT * FROM task");
+
+            List<TaskTO> taskList = new ArrayList<>();
+
+            while (rst.next()){
+                int id = rst.getInt("id");
+                String description = rst.getString("description");
+                boolean status = rst.getBoolean("status");
+                taskList.add(new TaskTO(id,description,status));
+            }
+            return taskList;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return new ArrayList<>();
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
