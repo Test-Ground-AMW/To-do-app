@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PreDestroy;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +36,20 @@ public class TaskHttpController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(produces = "application/json", consumes = "application/json")
     public TaskTO createTask(@RequestBody @Validated(TaskTO.create.class) TaskTO task){
-        System.out.println("create task");
-        return null;
+        try(Connection connection = pool.getConnection()) {
+            PreparedStatement stm = connection.prepareStatement("INSERT INTO task (description, status) VALUES (?,false)",
+                    Statement.RETURN_GENERATED_KEYS);
+            stm.setString(1,task.getDescription());
+            stm.executeUpdate();
+            ResultSet generatedKeys = stm.getGeneratedKeys();
+            generatedKeys.next();
+            int id = generatedKeys.getInt(1);
+            task.setId(id);
+            task.setStatus(false);
+            return task;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @ResponseStatus(HttpStatus.OK)
