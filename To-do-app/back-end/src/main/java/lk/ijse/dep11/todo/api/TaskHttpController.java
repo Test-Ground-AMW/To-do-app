@@ -80,7 +80,7 @@ public class TaskHttpController {
             stm.setString(1,task.getDescription());
             stm.setBoolean(2, task.getStatus());
             stm.setInt(3,id);
-            stm.execute();
+            stm.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -88,7 +88,19 @@ public class TaskHttpController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public void deleteTask(@PathVariable String id){
-        System.out.println("delete a task");
+    public void deleteTask(@PathVariable int id){
+        try(Connection connection = pool.getConnection()) {
+            // Business validation
+            PreparedStatement stmExist = connection.prepareStatement("SELECT * FROM task WHERE id = ?");
+            stmExist.setInt(1,id);
+            if (!stmExist.executeQuery().next()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The task not found");
+            }
+            PreparedStatement stm = connection.prepareStatement("DELETE FROM task WHERE id = ?");
+            stm.setInt(1,id);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
